@@ -1,0 +1,24 @@
+.status {
+    background-color: #492C14;
+    color:#fff;
+    margin: 10px;
+}
+#channelStatus a{
+    color:#fff;
+}
+
+.userDetails {
+    margin:10px;
+    vertical-align: middle;    
+}
+
+.userDetails img {
+    float:left;
+    padding-right:10px;
+    width: 64px;
+}
+
+.userDisplayName {
+    margin-top: auto;
+    margin-bottom: auto;
+}

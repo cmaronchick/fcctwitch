@@ -1,0 +1,25 @@
+{
+  "name": "fcctwitch",
+  "version": "1.0.0",
+  "description": "Twitch implementation for Free Code Camp",
+  "main": "index.js",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "jquery": "^3.1.1",
+    "jquery-ui": "^1.12.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmaronchick/fcctwitch.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cmaronchick/fcctwitch/issues"
+  },
+  "homepage": "https://github.com/cmaronchick/fcctwitch#readme"
+}
