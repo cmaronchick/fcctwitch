@@ -1,21 +1,55 @@
 var clientID = "ooqlww27vvtq8fth1dmfdft5wzbzg7z";
 var usersArray = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
+
+
+function insertHTML() {
     
+    var userDataHTML = "";
+    var userStreaming = "";
+    for (let u = 0; u < usersArray.length; u++) {
+        user = usersArray[u];
+        userDataHTML = "";
+        userStreaming = "";
+        console.log("user = " + user);
+        $.getJSON("https://api.twitch.tv/kraken/users/" + user + "?client_id=" + clientID, function(userData) {
+            userImage = "<img src=\"" + userData.logo + "\" alt=\"" + userData.display_name + "\">";
+            userName = "<div class=\"userDisplayName\">" + userData.display_name + "</div><br>";
+            userDataHTML += userImage + userName;
+            console.log("https://api.twitch.tv/kraken/streams/"+ userData.display_name);
+
+            $.getJSON("https://api.twitch.tv/kraken/streams/"+ userData.display_name + "?client_id=" + clientID, function(userStream) {
+                    console.log(userStream.stream);
+                    if (userStream.stream != null) {
+                        console.log(userStream.stream.game);
+                        userStreaming = "<div class=\"userStreamStatus\">Online now playing " + userStream.stream.game + "</div>";
+                        userDataHTML += userStreaming;
+                        $("#" + user).append(userStreaming);
+                    }
+                    $("#userList").append("<div class=\"row userDetails\"><div class=\"col-xs-12\" id=\"" + user + "\">" +
+                    userImage + userName + userStreaming + "</div></div>");
+                
+            });
+            
+        });
+
+    }
+}
+
 $(document).ready(function() {
+    insertHTML();
 var liveStatus = false;
 var urlStreams =  "https://api.twitch.tv/kraken/streams/freecodecamp?client_id=" + clientID;
-var streamsJSON = $.getJSON(urlStreams,function(streamData) {
-    if (streamData.stream != null) {
-        liveStatus = true;
-    }
-});
+
 var urlChannel = $.getJSON("https://api.twitch.tv/kraken/channels/freecodecamp?client_id=" + clientID, function(data) {
-    console.log(data);
+    // console.log(data);
     self = data;
     var liveStatusHTML = "";
-    if (liveStatus == true) {
-        liveStatusHTML = "<strong>Free Code Camp is LIVE! Tune in now!</strong><br>";
-    }
+    var streamsJSON = $.getJSON(urlStreams,function(streamData) {
+        if (streamData.stream != null) {
+            liveStatus = true;
+            liveStatusHTML = "<strong>Free Code Camp is LIVE! Tune in now!</strong><br>";
+        }
+    });
     var channelBannerHTML = "<div class=\"row\"><div class=\"col-xs-12\"><div id=\"bannerDiv" + self.id + "\" class=\"banner\"><a href=\"" + self.url + "\" target=\"_blank\"><img src=\"" + self.profile_banner + "\" alt=\"\"></a></div></div></div>\n";
     var channelStatusHTML = "<div class=\"row\" id=\"channelStatus\"><div class=\"col-xs-12\ status\"><strong>Status: </strong> <a href=\"" + self.url + "\" target=\"_blank\">" + liveStatusHTML + self.status + "</a></div></div>"
     $("#container").prepend(channelBannerHTML + channelStatusHTML);
@@ -33,43 +67,6 @@ var urlChannel = $.getJSON("https://api.twitch.tv/kraken/channels/freecodecamp?c
 //   }
 });
 // var channelJSON = $.getJSON(urlChannel,function(data) {
-var userStream = "";
-var userDataHTML = "";
-var userImage = "";
-var userName = "";
-
-  for (i = 0; i < usersArray.length; i++) {
-    user = usersArray[i];
-    var userStreaming = "";
-    $.getJSON("https://api.twitch.tv/kraken/users/" + user + "?client_id=" + clientID, function(userData) {
-        // if (userStreamData != null) {
-        //     console.log(userStreamData);
-        //         userStreaming = "Online playing " + userDataJSON;
-        // }
-        self = userData;
-        // console.log(userData);
-        //for (u = 0; u < userData.length; u++) {
-            userDataHTML = "<div class=\"row userDetails\"><div class=\"col-xs-12\" id=\"" + userData.display_name + "\">";
-            userImage = "<img src=\"" + userData.logo + "\" alt=\"" + userData.display_name + "\">";
-            userName = "<div class=\"userDisplayName\">" + userData.display_name + "</div><br><div class=\"userStreamStatus\">";
-            //userDataHTML += userData[u] + "<br>";
-        //}
-    });
-    $.getJSON("https://api.twitch.tv/kraken/streams/"+ user + "?client_id=" + clientID, function(userStream) {
-        var userStreaming = "Offline";
-        console.log("userStream.stream = ")
-        console.log(userStream.stream);
-        if (userStream.stream != null) {
-            console.log(userStream.stream.game);
-        userDataHTML += "Online now playing " + userStream.stream.game;
-        } else {
-            userDataHTML += userStreaming;
-        }
-    });
-    userDataHTML += userImage + userName + userStreaming;
-    userDataHTML += "</div></div></div>";
-    $("#userList").prepend(userDataHTML);
-  }
 
 $("#refresh").on("click", function() {
 // });
