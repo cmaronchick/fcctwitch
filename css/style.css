@@ -9,16 +9,29 @@
 
 .userDetails {
     margin:10px;
-    vertical-align: middle;    
+    background-color: #000;
+    color: #fff;
+    cursor: pointer;
+    height: 64px;
 }
 
 .userDetails img {
     float:left;
-    padding-right:10px;
+    padding:10px;
     width: 64px;
 }
 
 .userDisplayName {
-    margin-top: auto;
-    margin-bottom: auto;
+    float: left;
+    margin-top:20px;
+}
+
+.userStreamStatus {
+    margin-top:20px;
+    float: right;
+}
+
+.secondary {
+    background-color: gray;
+    color: #000;
 }

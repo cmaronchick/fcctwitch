@@ -1,38 +1,57 @@
 var clientID = "ooqlww27vvtq8fth1dmfdft5wzbzg7z";
-var usersArray = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
+var usersArray = ["ESL_SC2", "OgamingSC2", "cretetion", "freecodecamp", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas","brunofin"];
 
 
 function insertHTML() {
     
     var userDataHTML = "";
     var userStreaming = "";
-    for (let u = 0; u < usersArray.length; u++) {
-        user = usersArray[u];
+    var counter = 0;
+    usersArray.forEach(function(user) {
+        var rowClass = "primary";
+        // user = usersArray[u];
         userDataHTML = "";
         userStreaming = "";
-        console.log("user = " + user);
-        $.getJSON("https://api.twitch.tv/kraken/users/" + user + "?client_id=" + clientID, function(userData) {
-            userImage = "<img src=\"" + userData.logo + "\" alt=\"" + userData.display_name + "\">";
-            userName = "<div class=\"userDisplayName\">" + userData.display_name + "</div><br>";
-            userDataHTML += userImage + userName;
-            console.log("https://api.twitch.tv/kraken/streams/"+ userData.display_name);
-
-            $.getJSON("https://api.twitch.tv/kraken/streams/"+ userData.display_name + "?client_id=" + clientID, function(userStream) {
-                    console.log(userStream.stream);
-                    if (userStream.stream != null) {
-                        console.log(userStream.stream.game);
-                        userStreaming = "<div class=\"userStreamStatus\">Online now playing " + userStream.stream.game + "</div>";
-                        userDataHTML += userStreaming;
-                        $("#" + user).append(userStreaming);
+        var accountActive = false;
+        console.log("https://api.twitch.tv/kraken/users/" + user + "?client_id=" + clientID);
+        
+            $.getJSON("https://api.twitch.tv/kraken/users/" + user + "?client_id=" + clientID, function(userData) {
+                // accountActive = true;
+                var userImage = "<img src=\"" + userData.logo + "\" alt=\"" + userData.display_name + "\">";
+                var userName = "<div class=\"userDisplayName\">" + userData.display_name + "</div>";
+                var userUrl = " onclick=\"window.open('http://twitch.tv/" + user + "')\"";
+                userDataHTML += userImage + userName;
+                console.log("https://api.twitch.tv/kraken/streams/"+ userData.display_name + "?client_id=" + clientID);
+                console.log(accountActive);
+                if (userData.logo != null) {
+                    $.getJSON("https://api.twitch.tv/kraken/streams/"+ userData.display_name + "?client_id=" + clientID, function(userStream) {
+                    if (counter % 2 == 1) {
+                        rowClass = "secondary"
                     }
-                    $("#userList").append("<div class=\"row userDetails\"><div class=\"col-xs-12\" id=\"" + user + "\">" +
-                    userImage + userName + userStreaming + "</div></div>");
+                    console.log(counter);
+                    counter++;
+                            console.log("stream = ");
+                            console.log(userStream.stream);
+                            if (userStream.stream != null) {
+                                console.log(userStream.stream.game);
+                                userStreaming = "<div class=\"userStreamStatus\"><strong>STATUS:</strong> Online now playing " + userStream.stream.game + "</div>";
+                                userDataHTML += userStreaming;
+                                // $("#" + user).append(userStreaming);
+                            } else {
+                                userStreaming = "<div class=\"userStreamStatus\"><strong>STATUS:</strong> Offline</div>";
+                            }
+                            $("#userList").prepend("<div class=\"row userDetails " + rowClass + "\" id=\"" + user + "\"" + userUrl + "\"><div class=\"col-xs-12\">" +
+                            userImage + userName + userStreaming + "</div></div>");
+                        
+                    });
+                } else {
+                    $("#userList").append("<div class=\"row userDetails\"><div class=\"col-xs-12 userDisplayName\" id=\"" + user + "\">" + user + " has closed their account</div></div>");
+                }
                 
+            })
+            .fail(function() {
             });
-            
-        });
-
-    }
+    });
 }
 
 $(document).ready(function() {
@@ -67,6 +86,9 @@ var urlChannel = $.getJSON("https://api.twitch.tv/kraken/channels/freecodecamp?c
 //   }
 });
 // var channelJSON = $.getJSON(urlChannel,function(data) {
+    // document.querySelector(".userDetails").addEventListener("click",function() {
+    //     window.open("http://twitch.tv/" + this.id,"_blank");
+    // });
 
 $("#refresh").on("click", function() {
 // });
